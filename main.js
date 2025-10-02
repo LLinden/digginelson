@@ -198,7 +198,7 @@ class CenaPrincipal extends Phaser.Scene {
         .text(
           180,
           280,
-          "🏆 Atingiu 9999!\nVocê é o anão mais rico da banda! Parabéns!\n" +
+          "🏆 Atingiu 99999!\nVocê é o anão mais rico da banda! Parabéns!\n" +
             `⏱ Tempo: ${tempoFinal} segundos`,
           {
             fontSize: "18px",
