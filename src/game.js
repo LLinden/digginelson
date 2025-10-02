@@ -25,6 +25,7 @@ class CenaPrincipal extends Phaser.Scene {
     this.load.image("miner1", "assets/miner1.png");
     this.load.image("miner2", "assets/miner2.png");
     this.load.image("miner3", "assets/miner3.png");
+    this.load.audio("musicaFundo", "assets/musica.mp3");
   }
 
   create() {
@@ -45,6 +46,27 @@ class CenaPrincipal extends Phaser.Scene {
     // Sprite do minerador (apenas animado)
     this.miner = this.add.sprite(200, 150, "miner1").setScale(0.5);
     this.miner.play("cavar");
+
+    // Botão de música no canto superior direito
+    this.botaoMusica = this.add
+      .text(550, 40, "🔊", {
+        fontSize: "24px",
+        backgroundColor: "#444",
+        color: "#fff",
+        padding: { x: 10, y: 5 },
+      })
+      .setOrigin(0.5)
+      .setInteractive();
+
+    this.botaoMusica.on("pointerdown", () => {
+      if (this.musica.isPlaying) {
+        this.musica.pause(); // pausa a música
+        this.botaoMusica.setText("🔇"); // muda ícone
+      } else {
+        this.musica.resume(); // retoma a música
+        this.botaoMusica.setText("🔊"); // muda ícone
+      }
+    });
 
     // Botão de clique abaixo do minerador
     this.botaoClique = this.add
@@ -122,6 +144,14 @@ class CenaPrincipal extends Phaser.Scene {
       },
       loop: true,
     });
+
+    // Criar e tocar música de fundo
+    this.musica = this.sound.add("musicaFundo", {
+      volume: 0.5, // volume de 0 a 1
+      loop: true, // para repetir infinitamente
+    });
+
+    this.musica.play();
   }
 
   atualizarTexto() {
