@@ -37,6 +37,12 @@ class CenaPrincipal extends Phaser.Scene {
       fill: "#fff",
     });
 
+    // Título
+    this.titulo = this.add.text(270, 10, "CAVE DIGGINELSON‼️", {
+      fill: "#fa0b0bff",
+      font: "bold 20px 'MedievalSharp'",
+    });
+
     // Criar animação usando imagens separadas
     this.anims.create({
       key: "cavar",
