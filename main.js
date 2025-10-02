@@ -7,7 +7,7 @@ let tesourosPorSegundo = 0;
 
 // Lista de upgrades
 let upgrades = [
-  { nome: "⛏️ Melhoria Picareta", bonus: 9990, custo: 10, tipo: "clique" },
+  { nome: "⛏️ Melhoria Picareta", bonus: 1, custo: 10, tipo: "clique" },
   { nome: "🧪 Poção Tonificante", bonus: 1, custo: 20, tipo: "passivo" },
   { nome: "🧤 Melhoria Luvas", bonus: 2, custo: 50, tipo: "clique" },
   { nome: "🔥 Inspiração", bonus: 5, custo: 100, tipo: "passivo" },
