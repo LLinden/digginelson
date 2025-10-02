@@ -7,10 +7,11 @@ let tesourosPorSegundo = 0;
 
 // Lista de upgrades
 let upgrades = [
-  { nome: "⛏️ Melhoria Picareta", bonus: 1, custo: 10, tipo: "clique" },
+  { nome: "⛏️ Melhoria Picareta", bonus: 9990, custo: 10, tipo: "clique" },
   { nome: "🧪 Poção Tonificante", bonus: 1, custo: 20, tipo: "passivo" },
   { nome: "🧤 Melhoria Luvas", bonus: 2, custo: 50, tipo: "clique" },
   { nome: "🔥 Inspiração", bonus: 5, custo: 100, tipo: "passivo" },
+  { nome: "✨ Magia de Terra", bonus: 50, custo: 1000, tipo: "clique" },
 ];
 
 class CenaPrincipal extends Phaser.Scene {
@@ -27,6 +28,9 @@ class CenaPrincipal extends Phaser.Scene {
   }
 
   create() {
+    this.tempoInicial = this.time.now;
+    this.vitoriaMostrada = false;
+
     // Texto dos tesouros
     this.textoTesouros = this.add.text(10, 10, "💰 Tesouros: 0", {
       fontSize: "24px",
@@ -58,11 +62,11 @@ class CenaPrincipal extends Phaser.Scene {
 
     this.botaoMusica.on("pointerdown", () => {
       if (this.musica.isPlaying) {
-        this.musica.pause(); // pausa a música
-        this.botaoMusica.setText("🔇"); // muda ícone
+        this.musica.pause();
+        this.botaoMusica.setText("🔇");
       } else {
-        this.musica.resume(); // retoma a música
-        this.botaoMusica.setText("🔊"); // muda ícone
+        this.musica.resume();
+        this.botaoMusica.setText("🔊");
       }
     });
 
@@ -79,20 +83,20 @@ class CenaPrincipal extends Phaser.Scene {
       .on("pointerdown", () => {
         tesouros += tesourosPorClique;
         this.atualizarTexto();
+        this.checarVitoria();
 
         // Animação de clique
         this.tweens.add({
           targets: this.botaoClique,
-          scale: 1.2, // aumenta 20%
-          duration: 100, // duração de subida
-          yoyo: true, // volta ao tamanho normal
+          scale: 1.2,
+          duration: 100,
+          yoyo: true,
           ease: "Power1",
         });
 
-        // Mudança temporária de cor
-        this.botaoClique.setStyle({ backgroundColor: "#FFD700" }); // dourado
+        this.botaoClique.setStyle({ backgroundColor: "#FFD700" });
         this.time.delayedCall(150, () => {
-          this.botaoClique.setStyle({ backgroundColor: "#666" }); // volta ao normal
+          this.botaoClique.setStyle({ backgroundColor: "#666" });
         });
       });
 
@@ -123,23 +127,21 @@ class CenaPrincipal extends Phaser.Scene {
             }
 
             this.atualizarTexto();
+            this.checarVitoria();
 
-            // Animação de clique
             this.tweens.add({
               targets: botao,
-              alpha: 0.5, // fica mais transparente
+              alpha: 0.5,
               duration: 100,
               yoyo: true,
               ease: "Power1",
             });
 
-            // Mudança temporária de cor
-            botao.setStyle({ backgroundColor: "#3cff00ff" }); // dourado
+            botao.setStyle({ backgroundColor: "#3cff00ff" });
             this.time.delayedCall(150, () => {
-              botao.setStyle({ backgroundColor: "#444" }); // volta ao normal
+              botao.setStyle({ backgroundColor: "#444" });
             });
 
-            // custo progressivo
             up.custo = Math.floor(up.custo * 1.5);
             botao.setText(
               `${up.nome}\n(+${up.bonus} por ${up.tipo})\nCusto: ${up.custo}`
@@ -154,16 +156,16 @@ class CenaPrincipal extends Phaser.Scene {
       callback: () => {
         tesouros += tesourosPorSegundo;
         this.atualizarTexto();
+        this.checarVitoria();
       },
       loop: true,
     });
 
-    // Criar e tocar música de fundo
+    // Música de fundo
     this.musica = this.sound.add("musicaFundo", {
-      volume: 0.5, // volume de 0 a 1
-      loop: true, // para repetir infinitamente
+      volume: 0.5,
+      loop: true,
     });
-
     this.musica.play();
   }
 
@@ -171,6 +173,56 @@ class CenaPrincipal extends Phaser.Scene {
     this.textoTesouros.setText(
       `💰 Tesouros: ${tesouros}\n(+${tesourosPorClique}/clique, +${tesourosPorSegundo}/s)`
     );
+  }
+
+  checarVitoria() {
+    if (tesouros >= 9999 && !this.vitoriaMostrada) {
+      this.vitoriaMostrada = true;
+      let tempoFinal = Math.floor((this.time.now - this.tempoInicial) / 1000);
+
+      // Caixa de fundo - mais estreita e mais abaixo
+      let painel = this.add
+        .rectangle(180, 280, 280, 100, 0x000000, 0.8)
+        .setOrigin(0.5, 0)
+        .setStrokeStyle(3, 0xffd700)
+        .setAlpha(0);
+
+      // Texto sobre o painel
+      let msg = this.add
+        .text(
+          180,
+          280,
+          "🏆 Atingiu 9999!\nVocê é o anão mais rico da banda! Parabéns!\n" +
+            `⏱ Tempo: ${tempoFinal} segundos`,
+          {
+            fontSize: "18px",
+            fill: "#FFD700",
+            align: "center",
+            padding: { x: 10, y: 10 },
+            wordWrap: { width: 250 },
+          }
+        )
+        .setOrigin(0.5, 0)
+        .setAlpha(0);
+
+      // Fade-in para painel e mensagem
+      this.tweens.add({
+        targets: [painel, msg],
+        alpha: 1,
+        duration: 2000,
+        ease: "Power2",
+      });
+
+      // Brilho pulsante no texto
+      this.tweens.add({
+        targets: msg,
+        scale: 1.05,
+        yoyo: true,
+        repeat: -1,
+        duration: 800,
+        ease: "Sine.easeInOut",
+      });
+    }
   }
 }
 
