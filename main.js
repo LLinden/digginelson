@@ -176,7 +176,7 @@ class CenaPrincipal extends Phaser.Scene {
   }
 
   checarVitoria() {
-    if (tesouros >= 9999 && !this.vitoriaMostrada) {
+    if (tesouros >= 99999 && !this.vitoriaMostrada) {
       this.vitoriaMostrada = true;
       let tempoFinal = Math.floor((this.time.now - this.tempoInicial) / 1000);
 
