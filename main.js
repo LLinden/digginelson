@@ -1,4 +1,4 @@
-import Phaser from "phaser";
+//import Phaser from "phaser";
 
 const larguraBotao = 200;
 const alturaBotao = 70;
