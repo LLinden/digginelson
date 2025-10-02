@@ -126,6 +126,21 @@ class CenaPrincipal extends Phaser.Scene {
 
             this.atualizarTexto();
 
+            // Animação de clique
+            this.tweens.add({
+              targets: botao,
+              alpha: 0.5, // fica mais transparente
+              duration: 100,
+              yoyo: true,
+              ease: "Power1",
+            });
+
+            // Mudança temporária de cor
+            botao.setStyle({ backgroundColor: "#3cff00ff" }); // dourado
+            this.time.delayedCall(150, () => {
+              botao.setStyle({ backgroundColor: "#444" }); // volta ao normal
+            });
+
             // custo progressivo
             up.custo = Math.floor(up.custo * 1.5);
             botao.setText(
